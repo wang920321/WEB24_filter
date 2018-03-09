@@ -1,6 +1,7 @@
 package com.itheima.web.servlet;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.sql.SQLException;
 
 import javax.servlet.ServletException;
@@ -10,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+
+
 import com.itheima.domain.User;
 import com.itheima.service.UserService;
 
@@ -17,8 +20,9 @@ public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+		req.setCharacterEncoding("UTF-8");
 		HttpSession session = req.getSession();
-		String username = req.getParameter("username");
+		String username = req.getParameter("username");//中文张三
 		String password = req.getParameter("password");
 		UserService service=new UserService();
 		User user=null;
@@ -33,8 +37,11 @@ public class LoginServlet extends HttpServlet {
 			String autoLogin=req.getParameter("autoLogin");
 			System.out.println(autoLogin);
 			if(autoLogin!=null){
-				Cookie cookie_username=new Cookie("cookie_username",user.getUsername());
-				Cookie cookie_password=new Cookie("cookie_password",user.getPassword());
+				//对中文张三进行编码
+				String username_code = URLEncoder.encode(username, "UTF-8");
+				
+				Cookie cookie_username=new Cookie("cookie_username",username_code);
+				Cookie cookie_password=new Cookie("cookie_password",password);
 				//设置cookie的持久化时间
 				cookie_username.setMaxAge(60*60);
 				cookie_password.setMaxAge(60*60);

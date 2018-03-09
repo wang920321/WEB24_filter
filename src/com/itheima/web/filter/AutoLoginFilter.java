@@ -1,6 +1,7 @@
 package com.itheima.web.filter;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.sql.SQLException;
 
 import javax.servlet.Filter;
@@ -37,7 +38,10 @@ public class AutoLoginFilter implements Filter{
 			for (Cookie cookie : cookies) {
 				//获得名字为cookie_username和cookie_password
 				if("cookie_username".equals(cookie.getName())){
+					
 					cookie_username=cookie.getValue();
+					//恢复中文用户名
+					cookie_username=URLDecoder.decode(cookie_username, "UTF-8");
 					System.out.println(cookie.getValue());
 				}
 				if("cookie_password".equals(cookie.getName())){
